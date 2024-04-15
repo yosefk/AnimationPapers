@@ -10,5 +10,8 @@ which requires vectorizing it. **The input resolution is 720x720.**
 * `visualize_custom.py`: take the model output and produce a black-and-white png image showing the resulting
   inbetween
 * `PATCHES.py`: a couple of patches to apply to AnimeInbet source code in order to feed & visualize custom data.
+* `sample.py`: code for creating a "data sample" = a graph of points connected by lines, and saving it as a
+  pair of .png and .json files. `vectorize.py` uses this to write its output, which `custom_data.py` can then
+  load into Python objects you can feed to inference.
 
 
