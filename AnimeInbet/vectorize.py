@@ -79,13 +79,16 @@ def vectorize(infile,outprefix):
   s.draw_image()
   s.save(outprefix)
 
+BLACK_TREHSOLD = 250
+
 def to720x720bw(frame):
         try:
-            frame = frame[:,:,0] + (frame[:,:,3]<100)
+            #frame = frame[:,:,3] + (frame[:,:,3]<100)
+            frame = 255-frame[:,:,3]
         except:
             frame = frame[:,:,0]
         w,h=frame.shape
-        bw = ((frame>32)*255 - (frame<=32)*frame).astype(np.uint8)
+        bw = ((frame>BLACK_TREHSOLD)*255 - (frame<=BLACK_TREHSOLD)*frame).astype(np.uint8)
         bw = cv2.resize(bw, (int((h//30)*20), int(w//30*20)), cv2.INTER_LANCZOS4)
         bw = ((bw>254)*255).astype(np.uint8)
         #bw = ((frame>32)*255).astype(np.uint8)
@@ -93,18 +96,12 @@ def to720x720bw(frame):
 #bb = bounding_box_of_black_pixels(bw[:,:,1])
         #print(bb)
         w, h = (maxx-minx, maxy-miny)
-        assert w<700 and h < 700
+        if not (w<700 and h < 700):
+            print('WARNING: image too large to fit into the inference dimensions')
         print(bw.shape)
         bw = bw[:, minx-10: minx-10+720]
         print(bw.shape)
         return bw
 
-try:
-  os.makedirs('vecframes')
-except:
-  pass
-
-for f in sorted(os.listdir('exframes')):
-    n = int(f.split('_')[1].split('.')[0])
-    if n % 2 == 0:
-      vectorize('exframes/'+f, 'vecframes/%02d'%(n/2))
+src, dst = sys.argv[1:]
+vectorize(src, dst)

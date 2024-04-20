@@ -31,3 +31,7 @@
             img_vis = visualize_custom.visualize_custom(pred)
             cv2.imwrite('out.png', img_vis)
 
+# now you can run, say, python -u main.py --config configs/cr_inbetweener_full.yaml --eval
+# and get the result of inbetweening between your two inputs in out.png (of course
+# configs/cr_inbetweener_full.yaml is ignored since you replaced the loop going through
+# the dataset specified in this file with inference on your inputs) 
